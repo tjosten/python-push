@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<title>python-push</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+				$(document).ready(function(){
+					console.log('[document] ready');
+					
+					initPush();
+				});
+				
+				initPush = function() {
+					console.log('[push] request fired, waiting');
+					$.post("/push/", { timestamp: (new Date().getTime()/1000) },
+						function(response) {
+							console.log('[push] got push!');
+							
+							switch(response.key) {
+								case 'msg':
+									$('#response').append('<h1>'+response.value+'</h1>');
+								break;	
+							}
+							
+							initPush();
+						}, 'json');
+				};
+		</script>
+		
+	</head>
+	<body>
+		<div id="response"></div>
+	</body>
+</html>
