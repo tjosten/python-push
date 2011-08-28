@@ -15,18 +15,25 @@
 				
 				initPush = function() {
 					console.log('[push] request fired, waiting');
-					$.post("/push/", { timestamp: (new Date().getTime()/1000) },
-						function(response) {
+					$.ajax({
+						type: 'POST',
+						url: "/push/", 
+						data: { 'timestamp': (new Date().getTime()/1000) }, 
+						dataType: 'json', 
+						async: true, 
+						timeout: 360000,
+						success: function(response) {
 							console.log('[push] got push!');
-							
 							switch(response.key) {
 								case 'msg':
 									$('#response').append('<h1>'+response.value+'</h1>');
 								break;	
 							}
-							
+						},
+						complete: function() {
 							initPush();
-						}, 'json');
+						}
+					});
 				};
 		</script>
 		
